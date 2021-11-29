@@ -46,7 +46,7 @@ module.exports = async( request ) => {
 		url: file_url,
 	}
 
-	mkdirp.sync( env.UPLOAD_DIR + '/', { mode: '0744' })
+	mkdirp.sync( env.PRIVATE_ROOT + '/fs/', { mode: '0744' })
 
 	const op_state = await new Promise((resolve, reject) => {
 
@@ -121,10 +121,10 @@ const validate_upload_file = request => {
 
 const validate_upload_meta = ( file, request ) => { // , gallery
 
-	// const dir_path = env.UPLOAD_DIR + '/'
+	// const dir_path = env.PRIVATE_ROOT + '/'
 	const tempPath = file.path
 	const file_URL = Date.now() + '_' + lib.random_hex(12) + '.jpg'
-	const finalPath = env.UPLOAD_DIR + '/' + file_URL // + '.' + detect_filetype_suffix
+	const finalPath = env.PRIVATE_ROOT + '/fs/' + file_URL // + '.' + detect_filetype_suffix
 
 	return { 
 		success: true,
@@ -208,7 +208,7 @@ const validate_upload_meta = ( file, request ) => { // , gallery
 	// 	// const file_URL = `${ now }__${ FILE.originalFilename }`
 	// 	const file_URL = `${ now }__${ 'some-' + lib.random_hex(6) }`
 	// 	const date_object = lib.derive_date_object( now ) // lib.generate_pathhash(
-	// 	const dir_path = env.UPLOAD_DIR + date_object.year + '/' + date_object.month + '/' + date_object.day + '/'
+	// 	const dir_path = env.PRIVATE_ROOT + date_object.year + '/' + date_object.month + '/' + date_object.day + '/'
 
 	// 	const tempPath = file.path
 	// 	const finalPath = dir_path + file_URL // + '.' + detect_filetype_suffix
