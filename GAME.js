@@ -21,6 +21,9 @@ const init_user = async( socket ) => {
 
 	canopy = new Canopy( canopy )
 
+	const res = await canopy.init()
+	if( !res || !res.success ) return lib.return_fail( 'error looking up tiles', 'error initializing canopy' )
+
 	return {
 		success: true,
 		canopy: canopy.publish(),
