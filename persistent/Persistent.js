@@ -1,6 +1,6 @@
-const log = require('../log.js')
+const log = require('../utilities/log.js')
 
-const lib = require('../lib.js')
+const lib = require('../utilities/lib.js')
 
 // const uuid = require('uuid').v4
 

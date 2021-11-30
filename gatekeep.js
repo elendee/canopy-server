@@ -1,8 +1,9 @@
-// const env = require('./.env.js')
-const color = require('./color.js')
 
-const lib = require('./lib.js')
-const log = require('./log.js')
+// const env = require('./.env.js')
+const color = require('./utilities/color.js')
+
+const lib = require('./utilities/lib.js')
+const log = require('./utilities/log.js')
 
 const User = require('./persistent/User.js')
 

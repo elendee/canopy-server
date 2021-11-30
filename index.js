@@ -8,10 +8,10 @@ const fs = require('fs')
 const os = require('os')
 
 // LOCAL PACKAGES
-const log = require('./log.js')
-const DB = require('./db.js')
+const log = require('./utilities/log.js')
+const DB = require('./persistent/db.js')
 const env = require('./.env.js')
-const lib = require('./lib.js')
+const lib = require('./utilities/lib.js')
 
 // NPM 
 const bodyParser = require('body-parser')

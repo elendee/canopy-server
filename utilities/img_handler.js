@@ -2,10 +2,10 @@ const fs = require('fs')
 const mkdirp = require('mkdirp')
 
 const log = require('./log.js')
-const env = require('./.env.js')
+const env = require('../.env.js')
 const lib = require('./lib.js')
 
-const DB = require('./db.js')
+const DB = require('../persistent/db.js')
 
 const uuid = require('uuid').v4
 

@@ -1,5 +1,5 @@
 
-const env = require('./.env.js')
+const env = require('../.env.js')
 
 const active = env.ACTIVE
 

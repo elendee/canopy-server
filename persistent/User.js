@@ -1,7 +1,7 @@
 // const env = require('./.env.js')
-const lib = require('../lib.js')
-const log = require('../log.js')
-const DB = require('../db.js')
+const lib = require('../utilities/lib.js')
+const log = require('../utilities/log.js')
+const DB = require('./db.js')
 
 const GLOBAL = require('../GLOBAL_PUBLIC.js')
 

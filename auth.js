@@ -1,17 +1,17 @@
 
 const bcrypt = require('bcryptjs')
 
-const log = require('./log.js')
+const log = require('./utilities/log.js')
 const env = require('./.env.js')
-const lib = require('./lib.js')
+const lib = require('./utilities/lib.js')
 
-const DB = require('./db.js')
+const DB = require('./persistent/db.js')
 
 const SALT_ROUNDS = 10
 
 const User = require('./persistent/User.js')
 
-const { canopymail } = require('./mail.js')
+const { canopymail } = require('./utilities/mail.js')
 
 
 

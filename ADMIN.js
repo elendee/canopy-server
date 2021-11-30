@@ -1,8 +1,8 @@
 
-const log = require('./log.js')
+const log = require('./utilities/log.js')
 const env = require('./.env.js')
-const lib = require('./lib.js')
-const DB = require('./db.js')
+const lib = require('./utilities/lib.js')
+const DB = require('./persistent/db.js')
 
 const mysqldump = require('mysqldump')
 

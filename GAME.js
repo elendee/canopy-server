@@ -1,10 +1,17 @@
-const log = require('./log.js')
-const lib = require('./lib.js')
+const log = require('./utilities/log.js')
+const lib = require('./utilities/lib.js')
 const Canopy = require('./persistent/Canopy.js')
 const User = require('./persistent/User.js')
-const DB = require('./db.js')
+const DB = require('./persistent/db.js')
+
+const BROKER = require('./utilities/EventBroker.js')
 
 
+
+
+
+const USERS = {}
+const CANOPIES = {}
 
 const init_user = async( socket ) => {
 
@@ -27,9 +34,7 @@ const init_user = async( socket ) => {
 	}
 
 	canopy = new Canopy( canopy )
-
-	const res = await canopy.init()
-	if( !res || !res.success ) return lib.return_fail( 'error looking up tiles', 'error initializing canopy' )
+	await canopy.bring_online( CANOPIES )
 
 	const c = canopy.publish(['_seed'])
 

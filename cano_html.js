@@ -1,8 +1,8 @@
 
-const lib = require('./lib.js')
+const lib = require('./utilities/lib.js')
 
 const env = require('./.env.js')
-const log = require('./log.js')
+const log = require('./utilities/log.js')
 const GLOBAL = require('./GLOBAL_PUBLIC.js')
 
 const { request } = require('express')

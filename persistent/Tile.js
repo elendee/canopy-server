@@ -1,7 +1,7 @@
 
-const lib = require('../lib.js')
-const log = require('../log.js')
-const DB = require('../db.js')
+const lib = require('../utilities/lib.js')
+const log = require('../utilities/log.js')
+const DB = require('./db.js')
 const Persistent = require('./Persistent.js')
 
 class Tile extends Persistent {
@@ -18,6 +18,13 @@ class Tile extends Persistent {
 
 		log('flag', 'applying mod: ', mod )	
 
+	}
+
+
+	in_biome(){
+
+		return this !== 'EMPTY'
+		
 	}
 
 

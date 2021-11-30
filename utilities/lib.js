@@ -1,8 +1,8 @@
-const env = require('./.env.js')
+const env = require('../.env.js')
 
 // const GLOBAL_PUBLIC = require('./GLOBAL_PUBLIC.js')
 
-const STORE = require('./memstore.js')
+const STORE = require('../memstore.js')
 
 const log = require('./log.js')
 

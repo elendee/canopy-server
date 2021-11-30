@@ -1,8 +1,8 @@
 // const fs = require('fs')
 // const lib = require('./lib.js')
-const log = require('./log.js')
+const log = require('./utilities/log.js')
 // const env = require('./.env.js')
-const DB = require('./db.js')
+const DB = require('./persistent/db.js')
 
 
 

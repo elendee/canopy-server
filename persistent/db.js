@@ -1,7 +1,7 @@
 
-const log = require('./log.js')
+const log = require('../utilities/log.js')
 
-const env = require('./.env.js')
+const env = require('../.env.js')
 const mysql = require('mysql2')
 const assert = require('assert')
 

@@ -1,5 +1,5 @@
 const log = require('./log.js')
-const env = require('./.env.js')
+const env = require('../.env.js')
 const nodemailer = require('nodemailer')
 
 const transporter = nodemailer.createTransport({
