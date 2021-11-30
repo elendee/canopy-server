@@ -4,7 +4,7 @@ const color = require('./color.js')
 const lib = require('./lib.js')
 const log = require('./log.js')
 
-const User = require('./User.js')
+const User = require('./persistent/User.js')
 
 const render = require('./cano_html.js')
 

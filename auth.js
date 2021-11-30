@@ -9,7 +9,7 @@ const DB = require('./db.js')
 
 const SALT_ROUNDS = 10
 
-const User = require('./User.js')
+const User = require('./persistent/User.js')
 
 const { canopymail } = require('./mail.js')
 

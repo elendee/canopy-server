@@ -436,14 +436,6 @@ const format_strings = ( msg, params ) => {
 // }
 
 
-const validate_stamp = ( ...vals ) => {
-	if( !Array.isArray( vals ) ) return false
-	for( const val of vals ){
-		if( val && typeof val === 'number' ) return val
-	}
-	return vals[ vals.length - 1 ]
-}
-
 // const validate_date_object = ( ...vals ) => {
 
 // 	for( const val of vals ){
@@ -647,7 +639,6 @@ module.exports = {
 	validate_seconds,
 	validate_ISO,
 	// validate_date_object,
-	validate_stamp,
 	// validate_UTC,
 	// validate_vec3,
 	// validate_quat,

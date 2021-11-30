@@ -36,27 +36,27 @@ const footer = request => {
 
 
 const scripts = {
-	index: `<script type='module' src='/js/routing/init_index.js?v=1' defer='defer'></script>`,
-	account: `<script type='module' src='/js/routing/init_account.js?v=1' defer='defer'></script>`,
-	admin: `<script type='module' src='/js/routing/init_admin.js?v=1' defer='defer'></script>`,
-	await_confirm: `<script type='module' src='/js/routing/init_await_confirm.js?v=1' defer='defer'></script>`,
-	auth: `<script type='module' src='/js/routing/init_auth.js?v=1' defer='defer'></script>`,
-	world: `<script type='module' src='/js/routing/init_world.js?v=1' defer='defer'></script>`,
-	send_reset: `<script type='module' src='/js/routing/init_send-reset.js?v=1' defer='defer'></script>`,
-	redirect: `<script type='module' src='/js/routing/init_redirect.js?v=1' defer='defer'></script>`,
-	process_confirm: `<script type='module' src='/js/routing/init_process-confirm.js?v=1' defer='defer'></script>`,
-	'404': `<script type='module' src='/js/routing/init_404.js?v=1' defer='defer'></script>`,
+	index: `<script type='module' src='/js/routing/init_index.js' defer='defer'></script>`,
+	account: `<script type='module' src='/js/routing/init_account.js' defer='defer'></script>`,
+	admin: `<script type='module' src='/js/routing/init_admin.js' defer='defer'></script>`,
+	await_confirm: `<script type='module' src='/js/routing/init_await_confirm.js' defer='defer'></script>`,
+	auth: `<script type='module' src='/js/routing/init_auth.js' defer='defer'></script>`,
+	world: `<script type='module' src='/js/routing/init_world.js' defer='defer'></script>`,
+	send_reset: `<script type='module' src='/js/routing/init_send-reset.js' defer='defer'></script>`,
+	redirect: `<script type='module' src='/js/routing/init_redirect.js' defer='defer'></script>`,
+	process_confirm: `<script type='module' src='/js/routing/init_process-confirm.js' defer='defer'></script>`,
+	'404': `<script type='module' src='/js/routing/init_404.js' defer='defer'></script>`,
 }
 
 const styles = {
-	base: `<link rel='stylesheet' href='/css/base.css?v=1'>`,
-	modals: `<link rel='stylesheet' href='/css/modals.css?v=1'>`,
-	index: `<link rel='stylesheet' href='/css/index.css?v=1'>`,
-	account: `<link rel='stylesheet' href='/css/account.css?v=1'>`,
-	admin: `<link rel='stylesheet' href='/css/admin.css?v=1'>`,
-	auth: `<link rel='stylesheet' href='/css/auth.css?v=1'>`,
-	world: `<link rel='stylesheet' href='/css/world.css?v=1'>`,
-	'404': `<link rel='stylesheet' href='/css/404.css?v=1'>`,
+	base: `<link rel='stylesheet' href='/css/base.css'>`,
+	modals: `<link rel='stylesheet' href='/css/modals.css'>`,
+	index: `<link rel='stylesheet' href='/css/index.css'>`,
+	account: `<link rel='stylesheet' href='/css/account.css'>`,
+	admin: `<link rel='stylesheet' href='/css/admin.css'>`,
+	auth: `<link rel='stylesheet' href='/css/auth.css'>`,
+	world: `<link rel='stylesheet' href='/css/world.css'>`,
+	'404': `<link rel='stylesheet' href='/css/404.css'>`,
 	// privacy: `<div id='form-privacy'><div class='privacy-content'><div class='alert-close'>&times;</div>privacy alert here....</div></div>`
 }
 
@@ -295,8 +295,6 @@ const render = function( type, request, data ){
 					</head>
 					<body class='${ type }' data-logged='${ lib.is_logged( request )}'>
 						<div id='content'>
-							<canvas id='world-canvas'></canvas>
-
 						</div>
 						${ footer( request ) }
 					</body>

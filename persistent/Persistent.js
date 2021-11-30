@@ -1,6 +1,6 @@
-const log = require('./log.js')
+const log = require('../log.js')
 
-const lib = require('./lib.js')
+const lib = require('../lib.js')
 
 // const uuid = require('uuid').v4
 
@@ -14,9 +14,9 @@ module.exports = class Persistent {
 
 		this._table = init._table
 
-		this._created = lib.validate_stamp( init.created, init._created, 0 )
+		this._created = lib.validate_number( init.created, init._created, 0 )
 
-		this._edited = lib.validate_stamp( init.edited, init._edited, 0 )
+		this._edited = lib.validate_number( init.edited, init._edited, 0 )
 
 		this.logistic = []
 		this.logistic.push('logistic', 'xyzzy', '_table', '_id', '_created', '_edited')

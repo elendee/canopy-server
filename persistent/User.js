@@ -1,13 +1,13 @@
 // const env = require('./.env.js')
-const lib = require('./lib.js')
-const log = require('./log.js')
-const DB = require('./db.js')
+const lib = require('../lib.js')
+const log = require('../log.js')
+const DB = require('../db.js')
 
-const GLOBAL = require('./GLOBAL_PUBLIC.js')
+const GLOBAL = require('../GLOBAL_PUBLIC.js')
 
 const Persistent = require('./Persistent.js')
 
-// const { coilmail } = require('./mail.js')
+// const { coilmail } = require('../mail.js')
 
 const uuid = require('uuid').v4
 

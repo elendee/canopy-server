@@ -24,7 +24,7 @@ const cookie = require('cookie')
 
 
 
-const User = require('./User.js')
+const User = require('./persistent/User.js')
 // const MemoryStore = require('memorystore')(session)
 
 const STORE = require('./memstore.js')
@@ -45,6 +45,8 @@ const gatekeep = require('./gatekeep.js')
 const render = require('./cano_html.js')
 
 const WSS = require('./WSS.js')()
+
+const GAME = require('./GAME.js')
 
 const { response } = require('express')
 
@@ -104,26 +106,23 @@ const server = http.createServer( exp )
 // hypothesis - this works locally but nginx handles on server
 
 if( env.LOCAL ){
-	exp.use('/js', express.static( '../client/js' )) 
-	exp.use('/css', express.static( '../client/css' )) 
-	exp.use('/resource', express.static( '../resource' ))
-	exp.use('/three-patch', express.static( '../three-patch' ))
-	// exp.use('/node_modules/quill-image-uploader', express.static( __dirname + '/node_modules/quill-image-uploader' ))
-	// exp.use('/.emails.csv', express.static( __dirname + '/.emails.csv' ))
-	exp.use('/fs', express.static( '../fs' )) // __dirname +	
+	exp.use('/js', express.static( env.PRIVATE_ROOT + '/client/js' )) 
+	exp.use('/css', express.static( env.PRIVATE_ROOT + '/client/css' )) 
+	exp.use('/resource', express.static( env.PRIVATE_ROOT + '/resource' ))
+	exp.use('/three-patch', express.static( env.PRIVATE_ROOT + '/three-patch' ))
+	exp.use('/fs', express.static( env.PRIVATE_ROOT + '/fs' )) // __dirname +	
 }
  
 exp.use( bodyParser.json({ 
 	type: 'application/json' ,
 	 limit: '1mb',
 }))
-// exp.use( favicon(__dirname + '/resource/favicon.ico') )
+
 exp.use( bodyParser.urlencoded({
 	extended: true,
 	limit: '1mb',
 }))
 
-// exp.use( upload.array() )
 
 exp.use( lru_session )
 
@@ -238,7 +237,7 @@ exp.get('/process_confirm', ( request, response ) => {
 exp.get('/temp/*.csv', ( request, response ) => {
 	if( lib.is_admin( request ) ){
 		// '/temp/emails.csv'
-		response.sendFile( request.path, { root: __dirname } )
+		response.sendFile( request.path, { root: '/' } )
 	}else{
 		response.send( render('404', request, '') )
 	}
@@ -497,6 +496,27 @@ local: ${ env.LOCAL }
 		if( WSS.clients.size > env.MAX_USERS ) {
 			return lib.return_fail_socket( socket, 'sorry, game is at capacity')
 		}
+
+		GAME.init_user( socket )
+		.then( res => {
+			if( res && res.success ){
+				socket.send(JSON.stringify({
+					type: 'init_entry',
+					canopy: res.canopy,
+				}))				
+			}else{
+				socket.send(JSON.stringify({
+					type: 'hal',
+					subtype: 'error',
+					msg: 'error initializing',
+				}))
+				log('flag', 'err init user: ', res )
+			}
+
+		})
+		.catch( err => {
+			log('flag', 'init entry err', err )
+		})
 
 		// game init user
 
