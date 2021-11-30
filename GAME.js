@@ -1,14 +1,15 @@
 const log = require('./log.js')
 const lib = require('./lib.js')
 const Canopy = require('./persistent/Canopy.js')
-// const User = require('./persistent/User.js')
+const User = require('./persistent/User.js')
 const DB = require('./db.js')
 
 
 
 const init_user = async( socket ) => {
 
-	const user = socket.request.session.USER
+	let u = socket.request.session.USER
+	const user = new User( u )
 	if( !user ) return lib.return_fail( 'no user rejected', 'no user found' )
 
 	// get canopy
@@ -16,7 +17,9 @@ const init_user = async( socket ) => {
 	if( !user._canopy_key ){
 		canopy = await get_canopy('any')
 		if( !canopy ) return lib.return_fail( 'no canopies', 'no canopy found')
+
 		user._canopy_key = canopy.id
+		if( user._id ) await user.save()
 	}
 
 	canopy = new Canopy( canopy )
@@ -26,7 +29,7 @@ const init_user = async( socket ) => {
 
 	return {
 		success: true,
-		canopy: canopy.publish(),
+		canopy: canopy.publish(['_seed']),
 	}
 
 }

@@ -21,6 +21,7 @@ const ROUTES = {
 			'login', 
 			'account', 
 			'admin',
+			'world',
 		],
 		resource_routes: [
 			'fs',
@@ -47,6 +48,7 @@ const ROUTES = {
 		user_routes: [
 			'login', 
 			'register',
+			'world',
 		],
 		resource_routes: [],
 	}

@@ -25,6 +25,8 @@ module.exports = class User extends Persistent {
 
 		this.email = lib.validate_string( init.email, undefined )
 
+		this._password = lib.validate_string( init._password, init.password, undefined )
+
 		this.handle = lib.validate_string( init.handle, undefined )
 
 		this._reset_hash = lib.validate_string( init.reset_hash, init._reset_hash, undefined )
@@ -37,7 +39,7 @@ module.exports = class User extends Persistent {
 
 		this._confirm_key = lib.validate_string( init._confirm_key, init.confirm_key, undefined )
 
-		this._password = lib.validate_string( init._password, init.password, undefined )
+		this._canopy_key = lib.validate_number( init._canopy_key, init.canopy_key, undefined )
 
 		this.logistic = this.logistic || []
 		if( Array.isArray( init.logistic )){
@@ -90,6 +92,7 @@ module.exports = class User extends Persistent {
 			'confirm_key',
 			'confirm_sent',
 			'last_visited',
+			'canopy_key',
 		]
 
 		const update_vals = [ 
@@ -101,6 +104,7 @@ module.exports = class User extends Persistent {
 			this._confirm_key,
 			this._confirm_sent,
 			this._last_visited,
+			this._canopy_key,
 		]
 
 		log('User', 'saving user: ', this )

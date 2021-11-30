@@ -3,6 +3,7 @@ const log = require('../log.js')
 const DB = require('../db.js')
 const Persistent = require('./Persistent.js')
 const Tile = require('./Tile.js')
+const uuid = require('uuid').v4
 
 
 class Canopy extends Persistent {
@@ -47,6 +48,11 @@ class Canopy extends Persistent {
 				const tile = new Tile()
 				this._tiles[x][y] = tile
 			}
+		}
+
+		if( !this._seed ){
+			this._seed = uuid()
+			await this.save()
 		}
 
 		this._bloomed = true
