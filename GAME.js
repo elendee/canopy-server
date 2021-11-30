@@ -11,6 +11,7 @@ const init_user = async( socket ) => {
 	let u = socket.request.session.USER
 	const user = new User( u )
 	if( !user ) return lib.return_fail( 'no user rejected', 'no user found' )
+	log('init_user', lib.identify( user ) )
 
 	// get canopy
 	let canopy
@@ -20,6 +21,9 @@ const init_user = async( socket ) => {
 
 		user._canopy_key = canopy.id
 		if( user._id ) await user.save()
+
+		log('init_user', lib.identify( user ) + ' entered canopy' )
+
 	}
 
 	canopy = new Canopy( canopy )
@@ -27,9 +31,13 @@ const init_user = async( socket ) => {
 	const res = await canopy.init()
 	if( !res || !res.success ) return lib.return_fail( 'error looking up tiles', 'error initializing canopy' )
 
+	const c = canopy.publish(['_seed'])
+
+	log('init_user', lib.identify( user ) + ' entering canopy: ', c )
+
 	return {
 		success: true,
-		canopy: canopy.publish(['_seed']),
+		canopy: c,
 	}
 
 }
