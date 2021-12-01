@@ -31,18 +31,18 @@ const streetsweeper = () => {
 		_intervals.streetsweeper = setInterval(() => {
 
 			for( const uuid in CANOPIES ){
-				log('streetsweeper', 'canopy: ', uuid )
+				log('streetsweeper', 'canopy: ', uuid.substr(4), Object.keys( CANOPIES[ uuid ]._PLAYERS ).length + ' players' )
 				if( !Object.keys( CANOPIES[ uuid ]._PLAYERS ).length ){
 					CANOPIES[ uuid ].close( CANOPIES )
 				}
 			}
 
 			if( !Object.keys( CANOPIES ).length ){
-				log('streetsweeper', 'CLOSING', CANOPIES )
 				for( const key in _intervals ){
 					clearInterval( _intervals[ key ] )
 					_intervals[ key ] = false					
 				}
+				log('streetsweeper', 'CLOSING' )
 				log('boot', 'no canopies online; GAME going dormant')
 			}
 
