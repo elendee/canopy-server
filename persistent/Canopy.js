@@ -23,7 +23,7 @@ class Canopy extends Persistent {
 		this.description = lib.validate_string( init.description, 'not much is known about this canopy')
 		this.radius = lib.validate_number( init.radius, 100 )
 		this._seed = lib.validate_string( init._seed, init.seed, undefined )
-		this._max_npcs = lib.validate_number( init._max_npcs, init.max_npcs, 100 )
+		this._max_npcs = lib.validate_number( init._max_npcs, init.max_npcs, 5 )
 
 		// instantiated
 		this._intervals = {
