@@ -11,17 +11,6 @@ class Being {
 		this._directionY = init._directionY
 	}
 
-	step( canopy ){
-		log('flag', 'npc step !')
-		const being = this
-		
-		setTimeout(() => {
-			if( !being._deleted ){
-				being.step()
-			}
-		})
-	}
-
 }
 
 module.exports = Being

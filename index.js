@@ -18,6 +18,8 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 // const favicon = require('express-favicon')
 const cookie = require('cookie')
+
+const BROKER = require('./utilities/EventBroker.js')
 // const FormData = require('express-form-data')
 
 // const img_handler = require('./img_handler.js')
@@ -471,7 +473,7 @@ local: ${ env.LOCAL }
 
 		lru_session( request, {}, () => {
 
-			log('flag', JSON.stringify( request.session ).length )
+			// log('flag', JSON.stringify( request.session ).length )
 
 			log('wss', 'session parsed')
 
@@ -500,15 +502,15 @@ local: ${ env.LOCAL }
 		GAME.init_user( socket )
 		.then( res => {
 			if( res && res.success ){
-				socket.send(JSON.stringify({
-					type: 'init_entry',
-					canopy: res.canopy,
-				}))				
+				socket.send( JSON.stringify({
+					type: 'private_init_world',
+					canopy: res.canopy,					
+				}))
 			}else{
 				socket.send(JSON.stringify({
 					type: 'hal',
 					subtype: 'error',
-					msg: 'error initializing',
+					msg: 'error initializing',											
 				}))
 				log('flag', 'err init user: ', res )
 			}

@@ -1,10 +1,13 @@
+const env = require('../.env.js')
 const lib = require('../utilities/lib.js')
 const log = require('../utilities/log.js')
 const DB = require('./db.js')
 const Persistent = require('./Persistent.js')
 const Tile = require('./Tile.js')
 const Being = require('./Being.js')
+const Npc = require('./Npc.js')
 const uuid = require('uuid').v4
+const SOCKETS = require('../SOCKETS.js')
 
 
 class Canopy extends Persistent {
@@ -20,6 +23,7 @@ class Canopy extends Persistent {
 		this.description = lib.validate_string( init.description, 'not much is known about this canopy')
 		this.radius = lib.validate_number( init.radius, 100 )
 		this._seed = lib.validate_string( init._seed, init.seed, undefined )
+		this._max_npcs = lib.validate_number( init._max_npcs, init.max_npcs, 100 )
 
 		// instantiated
 		this._intervals = {
@@ -27,6 +31,7 @@ class Canopy extends Persistent {
 			growth: false,
 		}
 		this._NPCS = {}
+		this._PLAYERS = {}
 		this._tiles = []
 		this._bloomed = init._bloomed
 
@@ -46,23 +51,32 @@ class Canopy extends Persistent {
 		// begin pulses
 		if( !canopy._intervals.spawn_npc ){
 			canopy._intervals.spawn_npc = setInterval(() => {
-				const missing = canopy._npc_count - Object.keys( canopy._NPCS ).length
-				if( typeof missing !== 'number' || missing <= 0 ) return
-				for( let i = 0; i < missing; i++ ){
-					const npc = canopy.spawn_npc()
-					if( !npc ) log('flag', 'failed to init: ', npc )
-				}
-			}, 10 * 1000 )
+				canopy.spawn_npcs()
+			}, ( env.LOCAL ? 2 : 10 ) * 1000 )
 		}
 		if( !canopy._intervals.growth ){
 			canopy._intervals.growth = setInterval(() => {
-				
-			}, 10 * 1000 )
+				canopy.grow()
+			}, ( env.LOCAL ? 5 : 30 ) * 1000 )
 		}
 
 		CANOPIES[ canopy.uuid ] = this
 
 		return true
+
+	}
+
+
+	remove_user( uuid ){
+		delete this._PLAYERS[ uuid ]
+		if( user.uuid === this.uuid ) delete user.uuid
+	}
+
+
+	join_user( user ){
+
+		this._PLAYERS[ user.uuid ] = user
+		user._canopy_uuid = this.uuid
 
 	}
 
@@ -129,28 +143,49 @@ class Canopy extends Persistent {
 	}
 
 
-	spawn_npc(){
-		const npc = new Being({
-			_type: 'npc',
+	grow(){
+		this.broadcast( this.getSockets(), {
+			type: 'grow',
+			growth: 'some new tile data...'
 		})
+	}
+
+
+	spawn_npcs(){
+		const canopy = this
+		// shims....
+		const missing = canopy._max_npcs - Object.keys( canopy._NPCS ).length
+		if( typeof missing !== 'number' ) return
+		for( let i = 0; i < missing; i++ ){
+			if( Math.random() > .8 ){ // shims....
+				const npc = canopy.spawn_npc()
+				if( !npc ) log('flag', 'failed to init: ', npc )
+			}
+		}
+	}
+
+
+	spawn_npc(){
+
+		const npc = new Npc()
 
 		if( this.place_npc( npc ) ){
 			this._NPCS[ npc.uuid ] = npc
-			npc.step()
+			npc.step( this )
 			return npc
 		}
-
 		return false
 	
 	}
 
 
 	place_npc( npc ){
-		let cell
+
+		let tile
 		for( let x = 0; x < this._tiles.length; x++ ){
 			for( let y = 0; y < this._tiles[x].length; y++ ){
-				cell = this._tiles[x][y]
-				if( cell.in_biome() && cell.is_empty() ){
+				tile = this._tiles[x][y]
+				if( tile.in_biome() && tile.is_empty() ){
 					npc.x = x
 					npc.y = y
 					return true
@@ -158,10 +193,33 @@ class Canopy extends Persistent {
 			}
 		}
 		return false
+
+	}
+
+
+	getSockets(){
+		const canopy = this
+		const keys = Object.keys( canopy._PLAYERS )
+		const s = {}
+		for( const uuid in SOCKETS ){
+			if( keys.includes( uuid ) ){
+				s[ uuid ] = SOCKETS[ uuid ]
+			}
+		}
+		return s
+	}
+
+
+	broadcast( sockets, packet ){
+		const bundle = JSON.stringify( packet )
+		for( const uuid in sockets ){
+			sockets[ uuid ].send( bundle )
+		}
 	}
 
 
 	close(){
+
 		for( const type in this._intervals ){
 			clearInterval( this._intervals[ type ] )
 			this._intervals[ type ] = false
@@ -171,6 +229,7 @@ class Canopy extends Persistent {
 		}	
 
 		return true
+
 	}
 
 

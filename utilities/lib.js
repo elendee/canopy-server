@@ -601,13 +601,14 @@ const is_valid_handle_prefix = value => {
 
 
 const identify = obj => {
+	obj = obj || {}
 	let id = 'id: '
 	if( typeof obj === 'string' ) return id + obj
 	if( obj.name ) return id + 'name: ' + obj.name
 	if( obj.subtype ) return id + 'subtype: ' + obj.subtype
 	if( obj.type ) return id + 'type: ' + obj.type
 	if( obj.email ) return id + 'email: ' + obj.email
-	return '(unknown id)'
+	return '(unknown identify)'
 }
 
 

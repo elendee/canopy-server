@@ -41,6 +41,8 @@ module.exports = class User extends Persistent {
 
 		this._canopy_key = lib.validate_number( init._canopy_key, init.canopy_key, undefined )
 
+		this._canopy_uuid = lib.validate_string( init._canopy_uuid, undefined )
+
 		this.logistic = this.logistic || []
 		if( Array.isArray( init.logistic )){
 			for( const key of init.logistic ){

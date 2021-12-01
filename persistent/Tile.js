@@ -28,6 +28,15 @@ class Tile extends Persistent {
 	}
 
 
+	is_empty(){
+
+		// shimm......
+
+		return true
+		
+	}
+
+
 	async save(){
 
 		const update_fields = [
