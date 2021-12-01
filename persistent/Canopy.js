@@ -68,8 +68,11 @@ class Canopy extends Persistent {
 
 
 	remove_user( uuid ){
-		delete this._PLAYERS[ uuid ]
-		if( user.uuid === this.uuid ) delete user.uuid
+		const user = this._PLAYERS[ uuid ]
+		if( user ){
+			if( user._canopy_uuid === this.uuid ) delete user._canopy_uuid
+			delete this._PLAYERS[ uuid ]
+		}
 	}
 
 
@@ -218,15 +221,41 @@ class Canopy extends Persistent {
 	}
 
 
-	close(){
+	close( CANOPIES ){
 
-		for( const type in this._intervals ){
-			clearInterval( this._intervals[ type ] )
-			this._intervals[ type ] = false
+		if( !CANOPIES ){
+			log('flag', 'Canopy needs register CANOPIES to close')
 		}
-		for( const uuid in this._NPCS ){
-			this._NPCS[ uuid ].remove()
+
+		const canopy = this
+
+		const sockets = this.getSockets
+
+		for( const type in canopy._intervals ){
+			clearInterval( canopy._intervals[ type ] )
+			canopy._intervals[ type ] = false
+		}
+
+		for( const uuid in sockets ){ // should never do canopy with players, but just in case
+
+			sockets[ uuid ].send( JSON.stringify({
+				type: 'hal', 
+				subtype: 'error',
+				msg: 'canopy closed',
+			}))
+
+			BROKER.publish('GAME_PURGE', {
+				socket: sockets[ uuid ],
+				uuid: uuid, // optional / backup
+			})
+
+		}
+
+		for( const uuid in canopy._NPCS ){
+			canopy._NPCS[ uuid ].unset( canopy )
 		}	
+
+		delete CANOPIES[ canopy.uuid ]
 
 		return true
 

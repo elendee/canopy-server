@@ -467,6 +467,7 @@ production: ${ env.PRODUCTION }
 dev: ${ env.DEV }
 local: ${ env.LOCAL }
 `)
+	})
 
 
 	server.on('upgrade', function( request, socket, head ){
@@ -520,15 +521,9 @@ local: ${ env.LOCAL }
 			log('flag', 'init entry err', err )
 		})
 
-		// game init user
+	}) // wss connection
 
-		// ...
-
-	})
-
-	})
-
-})
+}) // initPool
 
 
 

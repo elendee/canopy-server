@@ -80,7 +80,9 @@ module.exports = {
 
 		socket.on('close', function( data ){
 			log('registry', 'socket close purge', lib.identify( USER ))
-			BROKER.publish('GAME_PURGE', socket )
+			BROKER.publish('GAME_PURGE', {
+				socket: socket 
+			})
 		})
 
 	}

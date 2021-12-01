@@ -9,6 +9,20 @@ class Being {
 		this.uuid = init.uuid || uuid()
 		this._directionX = init._directionX
 		this._directionY = init._directionY
+
+		this._intervals = {}
+
+	}
+
+	unset( canopy ){
+		const being = this
+		if( !canopy ) return
+		for( const key in being._intervals ){
+			clearTimeout( being._intervals[ key ])
+			being._intervals[ key ] = false
+		}
+		delete canopy._NPCS[ being.uuid ]
+		// delete ...
 	}
 
 }

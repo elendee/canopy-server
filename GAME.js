@@ -1,3 +1,5 @@
+
+const env = require('./.env.js')
 const log = require('./utilities/log.js')
 const lib = require('./utilities/lib.js')
 const Canopy = require('./persistent/Canopy.js')
@@ -12,10 +14,48 @@ const SOCKETS = require('./SOCKETS.js')
 
 
 
-const USERS = {}
 const CANOPIES = {}
 
+
+
+const _intervals = {
+	streetsweeper: false,
+}
+
+
+
+const streetsweeper = () => {
+
+	if( !_intervals.streetsweeper ){
+
+		_intervals.streetsweeper = setInterval(() => {
+
+			for( const uuid in CANOPIES ){
+				log('streetsweeper', 'canopy: ', uuid )
+				if( !Object.keys( CANOPIES[ uuid ]._PLAYERS ).length ){
+					CANOPIES[ uuid ].close( CANOPIES )
+				}
+			}
+
+			if( !Object.keys( CANOPIES ).length ){
+				log('streetsweeper', 'CLOSING', CANOPIES )
+				for( const key in _intervals ){
+					clearInterval( _intervals[ key ] )
+					_intervals[ key ] = false					
+				}
+				log('boot', 'no canopies online; GAME going dormant')
+			}
+
+		}, env.LOCAL ? 3 * 1000 : 30 * 1000  )
+	}
+
+}
+
+
+
 const init_user = async( socket ) => {
+
+	streetsweeper()
 
 	let u = socket.request.session.USER
 	const user = new User( u )
@@ -43,6 +83,9 @@ const init_user = async( socket ) => {
 	SOCKETS[ user.uuid ] = socket
 
 	canopy.join_user( user )
+
+	// log('flag', '??', Object.keys( CANOPIES ))
+	// log('flag', '??', Object.keys( canopy._PLAYERS ))
 
 	const c = canopy.publish(['_seed'])
 
@@ -78,19 +121,21 @@ const get_canopy = async( identifier ) => {
 
 
 
-const purge = ( socket, uuid ) => {
+const purge = event => {
 	// packet abusers
 
-	socket = socket || SOCKETS[ uuid ]
+	const { socket, uuid } = event
 
-	if( !socket || !socket.request || !socket.request.session || !socket.request.session.USER ){
-		log('flag', 'invalid socket purge' )
+	const s = socket || SOCKETS[ uuid ]
+
+	if( !s || !s.request || !s.request.session || !s.request.session.USER ){
+		log('flag', 'invalid s purge' )
 		return false
 	}
 
-	// log('flag', 'purging with coin: ', socket.request.session.USER._PILOT._coin )
+	// log('flag', 'purging with coin: ', s.request.session.USER._PILOT._coin )
 
-	let user = socket.request.session.USER
+	let user = s.request.session.USER
 
 	// const party = PARTIES.get_party( pilot.uuid )
 	// if( party ) party.remove_member( pilot.uuid )
@@ -98,7 +143,7 @@ const purge = ( socket, uuid ) => {
 	for( const can_uuid in CANOPIES ){
 		for( const uuid in CANOPIES[ can_uuid ]._PLAYERS ){
 			if( uuid ===  user.uuid ){
-				CANOPIES[ can_uuid ].remove_entity( uuid )
+				CANOPIES[ can_uuid ].remove_user( uuid )
 			}
 		}
 	}

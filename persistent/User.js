@@ -21,6 +21,8 @@ module.exports = class User extends Persistent {
 
 		this._table = 'users'
 
+		this.uuid = init.uuid || uuid()
+
 		const last_vis = init.last_visited || init._last_visited
 
 		this.email = lib.validate_string( init.email, undefined )
