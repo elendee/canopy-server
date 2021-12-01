@@ -229,6 +229,8 @@ class Canopy extends Persistent {
 
 		const canopy = this
 
+		canopy._deleted = true
+
 		const sockets = this.getSockets
 
 		for( const type in canopy._intervals ){

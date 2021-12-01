@@ -15,12 +15,18 @@ class Being {
 	}
 
 	unset( canopy ){
+
 		const being = this
+
+		being._deleted = true
+
 		if( !canopy ) return
+
 		for( const key in being._intervals ){
 			clearTimeout( being._intervals[ key ])
 			being._intervals[ key ] = false
 		}
+		
 		delete canopy._NPCS[ being.uuid ]
 		// delete ...
 	}
