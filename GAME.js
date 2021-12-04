@@ -227,7 +227,6 @@ const socket_send = event => {
 
 BROKER.subscribe('GAME_PURGE', purge )
 BROKER.subscribe('SOCKET_SEND', socket_send )
-// BROKER.subscribe('BROADCAST', broadcast )
 
 
 

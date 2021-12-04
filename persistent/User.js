@@ -45,7 +45,8 @@ module.exports = class User extends Persistent {
 
 		this._canopy_key = lib.validate_number( init._canopy_key, init.canopy_key, undefined )
 
-		this.custom_data = lib.validate_string( init.custom_data, '' )
+		this._custom_string = lib.validate_string( init._custom_string, init.custom_string, '' )
+
 
 		// instantaited
 
@@ -63,6 +64,42 @@ module.exports = class User extends Persistent {
 			}
 		}
 
+		this.custom_data = this.blob_unpack()
+
+	}
+
+
+
+	blob_unpack(){
+		const user = this
+		let data
+		try{
+			data = JSON.parse( user._custom_string )
+		}catch( err ){
+			log('flag', 'invalid player data')
+			data = { invalid: true }
+		}
+		return data
+	}
+
+
+	blob_update( packet ){
+		// log('flag', 'user update: ', packet )
+		const { data } = packet
+		const { blob } = data
+		this.custom_data = blob
+	}
+
+
+
+	blob_stringify(){
+		const user = this
+		try{
+			user._custom_string = JSON.stringify( user.custom_data )
+		}catch(err){
+			log('flag', 'blob_stringify err: ', err )
+			user._custom_string = JSON.stringify({ invalid: Date.now() })
+		}
 	}
 
 
@@ -98,6 +135,8 @@ module.exports = class User extends Persistent {
 
 		// log('User', 'saving from user: ', this )
 
+		this.blob_stringify()
+
 		const update_fields = [
 			'id',
 			'email',
@@ -108,7 +147,7 @@ module.exports = class User extends Persistent {
 			'confirm_sent',
 			'last_visited',
 			'canopy_key',
-			'custom_data',
+			'custom_string',
 		]
 
 		const update_vals = [ 
@@ -121,7 +160,7 @@ module.exports = class User extends Persistent {
 			this._confirm_sent,
 			this._last_visited,
 			this._canopy_key,
-			this.custom_data,
+			this._custom_string,
 		]
 
 		log('User', 'saving user: ', this )

@@ -50,6 +50,16 @@ module.exports = {
 					// 		packet: packet,
 					// 	})
 					// 	break;
+					case 'update_blob':
+						USER.update_blob( packet )
+						CANOPY.broadcast( CANOPY.getSockets(), {
+							type: 'update_blob',
+							data: {
+								uuid: USER.uuid,
+								blob: USER.custom_data,
+							}
+						})
+						break;
 
 					case 'ping_player':
 						const p = CANOPY.getPlayer({ uuid: packet.data.uuid })
