@@ -29,6 +29,9 @@ const handle_chat = event => {
 
 		case 'yell':
 			players = canopy.getPlayers() // sender._ref.position, PRIVATE.CHAT_RANGE
+			for( const uuid in players ){
+				sockets[ uuid ] = SOCKETS[ uuid ]
+			}
 			break;
 
 		case 'whisper':
