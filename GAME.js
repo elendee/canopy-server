@@ -97,7 +97,7 @@ const init_user = async( socket ) => {
 			type: 'private_init_world',
 			canopy: c,	
 			player1: user.publish(['_ref']),
-			player_uuids: Object.keys( c._PLAYERS ),
+			player_uuids: Object.keys( canopy._PLAYERS ),
 		}
 	})
 
