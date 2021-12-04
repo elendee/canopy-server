@@ -65,18 +65,15 @@ const init_user = async( socket ) => {
 	// get canopy
 	let canopy
 	if( !user._canopy_key ){
-		canopy = await get_canopy('any')
+		canopy = await touch_canopy('any')
 		if( !canopy ) return lib.return_fail( 'no canopies', 'no canopy found')
 
-		user._canopy_key = canopy.id
+		user._canopy_key = canopy._id
 		if( user._id ) await user.save()
 
 		log('init_user', lib.identify( user ) + ' entered canopy' )
 
 	}
-
-	canopy = new Canopy( canopy )
-	await canopy.bring_online( CANOPIES )
 
 	ROUTER.bind_user( socket, CANOPIES )
 
@@ -100,19 +97,43 @@ const init_user = async( socket ) => {
 
 
 
-const get_canopy = async( identifier ) => {
+const touch_canopy = async( identifier ) => {
 
+	if( !env.STARTER_CANOPY ) return lib.return_fail( 'missing starter canopy', 'failed to init canopy')
+
+	// find in memory
+	let live_id
+	if( identifier === 'any' ){
+		live_id = env.STARTER_CANOPY
+	}else if( typeof identifier === 'number' ){
+		live_id = identifier
+	}else{
+		return lib.return_fail('invalid canopy identifier: ' + identifier, 'failed to init canopy')
+	}
+
+	for( const uuid in CANOPIES ){
+		if( CANOPIES[ uuid ]._id === live_id ){
+			return CANOPIES[ uuid ] // <--- ( return )
+		}
+	}
+
+	// or, look up from db
 	const pool = DB.getPool()
 	let sql, res 
 	if( typeof identifier === 'number' ){
-		sql = 'SELECT * FROM canopies WHERE id=?'
+		sql = 'SELECT * FROM canopies WHERE id=? LIMIT 1'
 		res = await pool.queryPromise( sql, identifier )
 	}else if( identifier === 'any' ){
 		sql = 'SELECT * FROM canopies LIMIT 1'
 		res = await pool.queryPromise( sql )
 	}
 	if( res.error ) return lib.return_fail( res.error, 'faild to get canopy')
-	return res.results[0]
+	if( !res.results || !res.results.length ) return lib.return_fail('failed to find canopy: ' + identifier, 'failed to init canopy')
+
+	const canopy = new Canopy( res.results[0] )
+	await canopy.bring_online( CANOPIES )
+
+	return canopy
 
 }
 

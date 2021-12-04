@@ -213,6 +213,23 @@ class Canopy extends Persistent {
 	}
 
 
+	getPlayers( position, range ){
+		const p = {}
+		if( position && range ){
+			let player
+			for( const uuid in this._PLAYERS ){
+				player = this._PLAYERS[ uuid ]
+				if( player._ref.position.distanceTo( position ) < range ){
+					p[ uuid ] = player
+				}
+			}
+		}else{
+			p = this._PLAYERS
+		}
+		return p
+	}
+
+
 	broadcast( sockets, packet ){
 		const bundle = JSON.stringify( packet )
 		for( const uuid in sockets ){

@@ -3,6 +3,11 @@ const lib = require('../utilities/lib.js')
 const log = require('../utilities/log.js')
 const DB = require('./db.js')
 
+const {
+	Vector3,
+	Vector2,
+} = require('three')
+
 const GLOBAL = require('../GLOBAL_PUBLIC.js')
 
 const Persistent = require('./Persistent.js')
@@ -43,7 +48,14 @@ module.exports = class User extends Persistent {
 
 		this._canopy_key = lib.validate_number( init._canopy_key, init.canopy_key, undefined )
 
+		// instantaited
+
 		this._canopy_uuid = lib.validate_string( init._canopy_uuid, undefined )
+
+		this._ref = {
+			position: new Vector3(),
+			facing: new Vector2(),
+		}
 
 		this.logistic = this.logistic || []
 		if( Array.isArray( init.logistic )){

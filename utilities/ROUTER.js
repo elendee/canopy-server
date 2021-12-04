@@ -44,11 +44,15 @@ module.exports = {
 				switch( packet.type ){
 
 					case 'player_move':
-						BROKER.publish('PLAYER_MOVE')
+						BROKER.publish('PLAYER_MOVE', {
+							canopy: CANOPY,
+						})
 						break;
 
 					case 'chat':
-						BROKER.publish('CHAT')
+						BROKER.publish('CHAT', {
+							canopy: CANOPY,
+						})
 						break;
 
 					default: 

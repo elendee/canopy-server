@@ -39,6 +39,7 @@ const scripts = {
 	index: `<script type='module' src='/js/routing/init_index.js' defer='defer'></script>`,
 	account: `<script type='module' src='/js/routing/init_account.js' defer='defer'></script>`,
 	admin: `<script type='module' src='/js/routing/init_admin.js' defer='defer'></script>`,
+	upload: `<script type='module' src='/js/routing/init_upload.js' defer='defer'></script>`,
 	await_confirm: `<script type='module' src='/js/routing/init_await_confirm.js' defer='defer'></script>`,
 	auth: `<script type='module' src='/js/routing/init_auth.js' defer='defer'></script>`,
 	world: `<script type='module' src='/js/routing/init_world.js' defer='defer'></script>`,
@@ -126,6 +127,35 @@ const render = function( type, request, data ){
 						${ footer( request ) }
 					</body>
 				</html>`
+
+			case 'upload':
+
+				js_includes += scripts.upload
+
+				return `<html>
+					<head>
+						${ header_info }
+						${ css_includes }
+						${ js_includes }
+					</head>
+					<body class='${ type }' data-logged='${ lib.is_logged( request )}'>
+						${ overlays.global }
+						${ build_header( request ) }
+						<div id='content'>
+							<form id='j-upload' class='script-upload' data-upload-type='ja-script'>
+								<h4>snagglytooth script</h4>
+								<input type='file'>
+								<input type='submit' class='button' value='snaggle'>
+							</form>
+							<form id='o-upload' class='script-upload' data-upload-type='ok-script'>
+								<h4>hufflepuff script</h4>
+								<input type='file'>
+								<input type='submit' class='button' value='huffle'>
+							</form>
+						</div>
+					</body>
+				</html>`				
+				break;
 
 			case 'redirect':
 

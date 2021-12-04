@@ -22,7 +22,7 @@ const cookie = require('cookie')
 const BROKER = require('./utilities/EventBroker.js')
 // const FormData = require('express-form-data')
 
-// const img_handler = require('./img_handler.js')
+const file_handler = require('./utilities/file_handler.js')
 
 
 
@@ -181,24 +181,24 @@ exp.get('/reset', (request, response) => { // only GET with callback because of 
 	response.send( render( 'reset', request ))
 })
 
-exp.get('/bulletin_board', (request, response) => { // only GET with callback because of query params..=> .
-	OPS.bulletin_board( request )
-	.then( res => {
-		response.json( res )
-	})
-	.catch( err => { log('flag', 'err bulletin_board: ', err ) })
-})
+// exp.get('/bulletin_board', (request, response) => { // only GET with callback because of query params..=> .
+// 	OPS.bulletin_board( request )
+// 	.then( res => {
+// 		response.json( res )
+// 	})
+// 	.catch( err => { log('flag', 'err bulletin_board: ', err ) })
+// })
 
 exp.get('/await_confirm', (request, response) => {
 	response.send( render( 'await_confirm', request ) )
 })
 
-exp.get('/global_public', ( request, response )=> {
-	response.json( GLOBAL_PUBLIC )
-})
+// exp.get('/global_public', ( request, response )=> {
+// 	response.json( GLOBAL_PUBLIC )
+// })
 
-exp.get('/surveys', ( request, response )=> {
-	response.send( render( 'surveys', request ) )
+exp.get('/upload', ( request, response )=> {
+	response.send( render( 'upload', request ) )
 })
 
 
@@ -395,20 +395,23 @@ exp.post('/db_backup', ( request, response ) => {
 	})
 })
 
-// exp.post('/img_handler', (request, response) => {
-// 	img_handler( request )
-// 	.then( res => {
-// 		response.send( res )
-// 	})
-// 	.catch( err => {
-// 		log('flag', 'upload err : ', err )
-// 		response.send({
-// 			success: false,
-// 			msg: 'upload fail',
-// 		})
-// 	})
-
-// })
+exp.post('/file_handler', (request, response) => {
+	response.json({
+		success: false,
+		msg: 'filez haz beenz dezprecadez!'
+	})
+	// file_handler( request )
+	// .then( res => {
+	// 	response.send( res )
+	// })
+	// .catch( err => {
+	// 	log('flag', 'upload err : ', err )
+	// 	response.send({
+	// 		success: false,
+	// 		msg: 'upload fail',
+	// 	})
+	// })
+})
 
 
 
