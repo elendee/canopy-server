@@ -3,7 +3,7 @@ const env = require('../.env.js')
 
 const active = env.ACTIVE
 
-const timestamp = true
+const timestamp = false
 let d 
 let dstring = ''
 

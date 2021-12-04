@@ -506,17 +506,23 @@ local: ${ env.LOCAL }
 		GAME.init_user( socket )
 		.then( res => {
 			if( res && res.success ){
-				socket.send( JSON.stringify({
-					type: 'private_init_world',
-					canopy: res.canopy,					
-				}))
+				BROKER.publish('SOCKET_SEND', {
+					socket: socket,
+					packet: {
+						type: 'private_init_world',
+						canopy: res.canopy,			
+					}
+				})
 			}else{
-				socket.send(JSON.stringify({
-					type: 'hal',
-					subtype: 'error',
-					msg: 'error initializing',											
-				}))
-				log('flag', 'err init user: ', res )
+				BROKER.publish('SOCKET_SEND', {
+					socket: socket,
+					packet: {
+						type: 'hal',
+						subtype: 'error',
+						msg: 'error initializing',
+					}
+				})
+				// log('flag', 'err init user: ', res )
 			}
 
 		})

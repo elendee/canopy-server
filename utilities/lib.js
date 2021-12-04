@@ -1,6 +1,7 @@
 const env = require('../.env.js')
 
 // const GLOBAL_PUBLIC = require('./GLOBAL_PUBLIC.js')
+const BROKER = require('./EventBroker.js')
 
 const STORE = require('../memstore.js')
 
@@ -515,12 +516,13 @@ const return_fail_socket = ( socket, msg, time ) => {
 
 	if( !socket ) return
 
-	socket.send(JSON.stringify({
+	BROKER.publish('SOCKET_SEND', {
 		type: 'hal',
 		msg_type: 'error',
 		msg: msg,
-		time: time,
-	}))
+		time: time,		
+	})
+
 	return false
 
 }

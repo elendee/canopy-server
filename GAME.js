@@ -31,7 +31,7 @@ const streetsweeper = () => {
 		_intervals.streetsweeper = setInterval(() => {
 
 			for( const uuid in CANOPIES ){
-				log('streetsweeper', 'canopy: ', uuid.substr(4), Object.keys( CANOPIES[ uuid ]._PLAYERS ).length + ' players' )
+				log('streetsweeper', 'canopy: ', uuid.substr(0, 4), Object.keys( CANOPIES[ uuid ]._PLAYERS ).length + ' players' )
 				if( !Object.keys( CANOPIES[ uuid ]._PLAYERS ).length ){
 					CANOPIES[ uuid ].close( CANOPIES )
 				}
@@ -199,14 +199,21 @@ const purge = event => {
 
 
 
-const broadcast = packet => {
 
+const socket_send = event => {
+
+	log('socket_send', packet )
+
+	const { socket, packet } = event
+	packet.ts = Date.now()
+	socket.send( JSON.stringify( packet ) )
 }
 
 
 
 BROKER.subscribe('GAME_PURGE', purge )
-BROKER.subscribe('BROADCAST', broadcast )
+BROKER.subscribe('SOCKET_SEND', socket_send )
+// BROKER.subscribe('BROADCAST', broadcast )
 
 
 
