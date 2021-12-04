@@ -12,7 +12,6 @@ const SOCKETS = require('../SOCKETS.js')
 
 
 
-const cast_logs = ['chat']
 
 
 
@@ -241,8 +240,8 @@ class Canopy extends Persistent {
 
 		packet.ts = Date.now()
 
-		if( cast_logs.includes( packet.type )) log('broadcast', packet )
-		
+		if( ['chat', 'yell'].includes( packet.type ) ) log('broadcast', packet )
+
 		const bundle = JSON.stringify( packet )
 		for( const uuid in sockets ){
 			sockets[ uuid ].send( bundle )
