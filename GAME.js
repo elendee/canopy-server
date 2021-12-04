@@ -80,6 +80,8 @@ const init_user = async( socket ) => {
 
 	SOCKETS[ user.uuid ] = socket
 
+	// log('flag', 'new player: ', user.uuid )
+
 	canopy.join_user( user )
 
 	// log('flag', '??', Object.keys( CANOPIES ))

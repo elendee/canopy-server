@@ -7,48 +7,61 @@ const SOCKETS = require('./SOCKETS.js')
 
 const handle_chat = event => {
 
-	const { socket, packet, canopy } = event
+	try{
 
-	const { data } = packet
+		const { socket, packet, canopy } = event
 
-	log('chat', packet )
+		const { data } = packet
 
-	let players
-	const sockets = {}
-	const sender = socket.request.session.USER
+		log('chat', packet )
 
-	switch( data.chat_type ){
+		let players
+		const sockets = {}
+		const sender = socket.request.session.USER
 
-		case 'say':
-			players = canopy.getPlayers( sender._ref.position, PRIVATE.CHAT_RANGE )
-			const keys = Object.keys( players )
-			for( const uuid in SOCKETS ){
-				if( keys.includes( uuid ) ) sockets[ uuid ] = SOCKETS[ uuid ]
-			}
-			break;
+		switch( data.chat_type ){
 
-		case 'yell':
-			players = canopy.getPlayers() // sender._ref.position, PRIVATE.CHAT_RANGE
-			for( const uuid in players ){
-				sockets[ uuid ] = SOCKETS[ uuid ]
-			}
-			break;
+			case 'say':
+				players = canopy.getPlayers( sender._ref.position, PRIVATE.CHAT_RANGE )
+				const keys = Object.keys( players )
+				for( const uuid in SOCKETS ){
+					if( keys.includes( uuid ) ) sockets[ uuid ] = SOCKETS[ uuid ]
+				}
+				break;
 
-		case 'whisper':
-		case 'emote':
-		default: 	
-			log('flag', 'unhandled chat type:', data.chat_type )
-			break;
+			case 'yell':
+				players = canopy.getPlayers() // sender._ref.position, PRIVATE.CHAT_RANGE
+				for( const uuid in players ){
+					log('flag', 'PLAYER UUID: ', uuid )
+					if( !SOCKETS[ uuid ]){
+						log('flag', 'missing player: ', uuid )
+						continue
+					}
+					sockets[ uuid ] = SOCKETS[ uuid ]
+				}
+				for( const uuid in SOCKETS ) log('flag', 'SOCKET UUID: ', uuid )
+				break;
+
+			case 'whisper':
+			case 'emote':
+			default: 	
+				log('flag', 'unhandled chat type:', data.chat_type )
+				break;
+		}
+
+		if( !players ) return lib.return_fail('no players for chat: ' + data.msg, 'chat not sent')
+
+
+		canopy.broadcast( sockets, {
+			type: 'chat',
+			chat_type: data.chat_type,
+			msg: data.msg,
+			sender_uuid: sender.uuid,
+		})
+
+	}catch( er ){
+		log('flag', er )
 	}
-
-	if( !players ) return lib.return_fail('no players for chat: ' + data.msg, 'chat not sent')
-
-	canopy.broadcast( sockets, {
-		type: 'chat',
-		chat_type: data.chat_type,
-		msg: data.msg,
-		sender_uuid: sender.uuid,
-	})
 
 }
 

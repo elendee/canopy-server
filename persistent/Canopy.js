@@ -230,7 +230,9 @@ class Canopy extends Persistent {
 				}
 			}
 		}else{
-			p = this._PLAYERS
+			for( const uuid in this._PLAYERS ){
+				p[ uuid ] = this._PLAYERS[ uuid ]
+			}
 		}
 		return p
 	}
@@ -240,7 +242,7 @@ class Canopy extends Persistent {
 
 		packet.ts = Date.now()
 
-		if( ['chat', 'yell'].includes( packet.type ) ) log('broadcast', packet )
+		if( ['chat'].includes( packet.type ) ) log('broadcast', packet )
 
 		const bundle = JSON.stringify( packet )
 		for( const uuid in sockets ){
