@@ -9,7 +9,7 @@ const DB = require('./persistent/db.js')
 const BROKER = require('./utilities/EventBroker.js')
 const ROUTER = require('./utilities/ROUTER.js')
 const SOCKETS = require('./SOCKETS.js')
-
+const CHAT = require('./CHAT.js')
 
 
 
@@ -58,7 +58,8 @@ const init_user = async( socket ) => {
 	streetsweeper()
 
 	let u = socket.request.session.USER
-	const user = new User( u )
+	let user
+	socket.request.session.USER = user = new User( u )
 	if( !user ) return lib.return_fail( 'no user rejected', 'no user found' )
 	log('init_user', lib.identify( user ) )
 

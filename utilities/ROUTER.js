@@ -32,7 +32,7 @@ module.exports = {
 				CANOPY = CANOPIES[ USER._canopy_uuid ]
 
 				if( !CANOPY ){
-					log('flag', 'invalid pilot system uuid: ', USER._system_uuid )
+					log('flag', 'invalid pilot canopy uuid: ', USER._canopy_uuid )
 					// log('flag', 'missed packet: ', packet.type )
 					for( const uuid in CANOPIES ){
 						log('flag', 'available canopy: ', lib.identify( CANOPIES[ uuid ] ) )
@@ -46,12 +46,16 @@ module.exports = {
 					case 'player_move':
 						BROKER.publish('PLAYER_MOVE', {
 							canopy: CANOPY,
+							socket: socket,
+							packet: packet,
 						})
 						break;
 
 					case 'chat':
 						BROKER.publish('CHAT', {
 							canopy: CANOPY,
+							socket: socket,
+							packet: packet,
 						})
 						break;
 

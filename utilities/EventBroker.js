@@ -1,4 +1,4 @@
-// const env = require('../.env.js')
+const log = require('./log.js')
 
 
 
@@ -29,6 +29,8 @@ class MessageBroker {
 		if( !this.subscribers[event] ){
 			this.subscribers[event] = []
 		}
+
+		log('flag', 'subbin', event )
 	    
 	    this.subscribers[event].push( callback )
 
