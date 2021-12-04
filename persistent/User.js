@@ -45,6 +45,8 @@ module.exports = class User extends Persistent {
 
 		this._canopy_key = lib.validate_number( init._canopy_key, init.canopy_key, undefined )
 
+		this.custom_data = lib.validate_string( init.custom_data, '' )
+
 		// instantaited
 
 		this._canopy_uuid = lib.validate_string( init._canopy_uuid, undefined )
@@ -106,6 +108,7 @@ module.exports = class User extends Persistent {
 			'confirm_sent',
 			'last_visited',
 			'canopy_key',
+			'custom_data',
 		]
 
 		const update_vals = [ 
@@ -118,6 +121,7 @@ module.exports = class User extends Persistent {
 			this._confirm_sent,
 			this._last_visited,
 			this._canopy_key,
+			this.custom_data,
 		]
 
 		log('User', 'saving user: ', this )
