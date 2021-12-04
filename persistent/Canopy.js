@@ -238,6 +238,27 @@ class Canopy extends Persistent {
 	}
 
 
+	getPlayer( data ){
+
+		const { uuid, field, value } = data 
+
+		if( !uuid && ( !field || !value ) ) return undefined
+
+		if( uuid ){
+			for( const p_uuid in this._PLAYERS ){
+				if( uuid === p_uuid ) return this._PLAYERS[ p_uuid ]
+			}
+		}else{ // field / value
+			for( const p_uuid in this._PLAYERS ){
+				if( this._PLAYERS[ p_uuid ][ field ] === value ){
+					return this._PLAYERS[ p_uuid ]
+				}
+			}
+		}
+		return undefined
+	}
+
+
 	broadcast( sockets, packet ){
 
 		packet.ts = Date.now()

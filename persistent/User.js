@@ -2,19 +2,16 @@
 const lib = require('../utilities/lib.js')
 const log = require('../utilities/log.js')
 const DB = require('./db.js')
-
+const uuid = require('uuid').v4
 const {
 	Vector3,
 	Vector2,
 } = require('three')
-
 const GLOBAL = require('../GLOBAL_PUBLIC.js')
-
 const Persistent = require('./Persistent.js')
 
 // const { coilmail } = require('../mail.js')
 
-const uuid = require('uuid').v4
 
 module.exports = class User extends Persistent {
 	
@@ -28,13 +25,13 @@ module.exports = class User extends Persistent {
 
 		this.uuid = init.uuid || uuid()
 
-		const last_vis = init.last_visited || init._last_visited
+		// const last_vis = init.last_visited || init._last_visited
 
-		this.email = lib.validate_string( init.email, undefined )
+		this._email = lib.validate_string( init.email, undefined )
 
 		this._password = lib.validate_string( init._password, init.password, undefined )
 
-		this.handle = lib.validate_string( init.handle, undefined )
+		this.handle = lib.validate_string( init.handle, 'guest#' + uuid().substr(0, 6) )
 
 		this._reset_hash = lib.validate_string( init.reset_hash, init._reset_hash, undefined )
 
@@ -42,7 +39,7 @@ module.exports = class User extends Persistent {
 
 		this._confirm_sent = lib.validate_number( init._confirm_sent, init.confirm_sent, 0 )
 
-		const conf_date = init.confirm_date || init._confirm_date
+		// const conf_date = init.confirm_date || init._confirm_date
 
 		this._confirm_key = lib.validate_string( init._confirm_key, init.confirm_key, undefined )
 
@@ -72,7 +69,7 @@ module.exports = class User extends Persistent {
 
 		const user = this
 
-		log('gatekeep', 'update_visited: (' + column + ')', req.path, '...' + user.email.substr( 3 ) )
+		log('gatekeep', 'update_visited: (' + column + ')', req.path, '...' + user._email.substr( 3 ) )
 
 		const pool = DB.getPool()
 

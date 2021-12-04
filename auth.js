@@ -34,7 +34,7 @@ async function login_user( request ){
 	if( !email ) msg = 'no email given for login'
 	if( msg ) return lib.return_fail( 'invalid login : ' + msg, msg )
 
-	if( request.session.USER._id && request.session.USER.email === email ){
+	if( request.session.USER._id && request.session.USER._email === email ){
 		log('flag', 'success login') // already logged...
 		return { success: true }
 	}
@@ -154,12 +154,12 @@ const send_confirm_mail = async( user, new_one ) => {
 	}
 
 	const html = new_one ? 
-	'Click <a target="_blank" href="' + env.SITE_URL + '/process_confirm?e=' + user.email + '&k=' + user._confirm_key + '">this link</a> to confirm.<br><br>' : 
-	'Here is a new confirmation link for ' + env.SITE_TITLE + ':<br> <a target="_blank" href="' + env.SITE_URL + '/process_confirm?e=' + user.email + '&k=' + user._confirm_key + '">Click here to Confirm</a>'
+	'Click <a target="_blank" href="' + env.SITE_URL + '/process_confirm?e=' + user._email + '&k=' + user._confirm_key + '">this link</a> to confirm.<br><br>' : 
+	'Here is a new confirmation link for ' + env.SITE_TITLE + ':<br> <a target="_blank" href="' + env.SITE_URL + '/process_confirm?e=' + user._email + '&k=' + user._confirm_key + '">Click here to Confirm</a>'
 
 	const mailOptions = {
 		from: env.mail_admin,
-		to: user.email,
+		to: user._email,
 		subject: 'Confirm your ' + env.SITE_TITLE + ' account',
 		html: html,
 		text: lib.user_html( html, {
@@ -485,7 +485,7 @@ const confirm_account = async( request, STORE ) => {
 				log('flag', 'err get store sessions: ', err )
 			}
 			for( const id in sessions ){
-				if( sessions[ id ].USER && sessions[ id ].USER.email === email ){
+				if( sessions[ id ].USER && sessions[ id ].USER._email === email ){
 					STORE.destroy( id, err => {
 						if( err ){
 							log('flag', 'err sess destroy: ', err )

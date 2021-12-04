@@ -128,7 +128,7 @@ module.exports = gatekeep = function( req, res, next ) {
 				ip: ip,
 				method: req.method,
 				path: req.path,
-				email: req.session.USER.email,
+				email: req.session.USER._email,
 			}), req.path )
 
 			return next()
@@ -143,7 +143,7 @@ module.exports = gatekeep = function( req, res, next ) {
 				ip: ip,
 				method: req.method,
 				path: req.path,
-				email: req.session.USER.email,
+				email: req.session.USER._email,
 			}), req.path )
 
 			return next()
@@ -182,7 +182,7 @@ module.exports = gatekeep = function( req, res, next ) {
 			ip: ip,
 			method: req.method,
 			path: req.path,
-			email: req.session.USER.email,
+			email: req.session.USER._email,
 		}), req.path )
 
 		next()

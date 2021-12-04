@@ -32,7 +32,6 @@ const handle_chat = event => {
 			case 'yell':
 				players = canopy.getPlayers() // sender._ref.position, PRIVATE.CHAT_RANGE
 				for( const uuid in players ){
-					log('flag', 'PLAYER UUID: ', uuid )
 					if( !SOCKETS[ uuid ]){
 						log('flag', 'missing player: ', uuid )
 						continue

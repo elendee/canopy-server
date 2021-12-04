@@ -360,14 +360,14 @@ const _enum = {
 
 function is_admin( request ){
 
-	return request && request.session && request.session.USER && env.ADMINS.includes( request.session.USER.email )  // env.ADMINS.includes( request.session.USER._id )
+	return request && request.session && request.session.USER && env.ADMINS.includes( request.session.USER._email )  // env.ADMINS.includes( request.session.USER._id )
 
 }
 
 
 function is_test_account( request ){
 
-	return request && request.session && request.session.USER && env.TESTERS.includes( request.session.USER.email )
+	return request && request.session && request.session.USER && env.TESTERS.includes( request.session.USER._email )
 
 }
 
@@ -517,10 +517,15 @@ const return_fail_socket = ( socket, msg, time ) => {
 	if( !socket ) return
 
 	BROKER.publish('SOCKET_SEND', {
-		type: 'hal',
-		msg_type: 'error',
-		msg: msg,
-		time: time,		
+		socket: socket,
+		packet: {
+			type: 'hal',
+			data: {
+				msg_type: 'error',
+				msg: msg,
+				time: time,
+			}
+		}
 	})
 
 	return false

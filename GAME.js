@@ -91,10 +91,14 @@ const init_user = async( socket ) => {
 
 	log('init_user', lib.identify( user ) + ' entering canopy: ', c )
 
-	return {
-		success: true,
-		canopy: c,
-	}
+	BROKER.publish('SOCKET_SEND', {
+		socket: socket,
+		packet: {
+			type: 'private_init_world',
+			canopy: c,	
+			player1: user.publish(['_ref']),
+		}
+	})
 
 }
 
@@ -205,6 +209,11 @@ const purge = event => {
 const socket_send = event => {
 
 	const { socket, packet } = event
+
+	if( Object.keys( event ).length !== 2 ){
+		log('flag', 'invalid socket send', packet )
+		return 
+	}
 
 	packet.ts = Date.now()
 

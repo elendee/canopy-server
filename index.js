@@ -303,7 +303,7 @@ exp.post('/reset', function( request, response ){
 	auth.reset_pass( request )
 	.then( res => {
 		if( !res.success ){
-			log('flag', 'err resetting password: ', res, request.session.USER.email )
+			log('flag', 'err resetting password: ', res, request.session.USER._email )
 		}
 		// includes success false's :
 		response.json( res )
@@ -504,28 +504,6 @@ local: ${ env.LOCAL }
 		}
 
 		GAME.init_user( socket )
-		.then( res => {
-			if( res && res.success ){
-				BROKER.publish('SOCKET_SEND', {
-					socket: socket,
-					packet: {
-						type: 'private_init_world',
-						canopy: res.canopy,			
-					}
-				})
-			}else{
-				BROKER.publish('SOCKET_SEND', {
-					socket: socket,
-					packet: {
-						type: 'hal',
-						subtype: 'error',
-						msg: 'error initializing',
-					}
-				})
-				// log('flag', 'err init user: ', res )
-			}
-
-		})
 		.catch( err => {
 			log('flag', 'init entry err', err )
 		})

@@ -29,6 +29,8 @@ module.exports = class Persistent {
 
 	publish( excepted_array ){
 
+		if( excepted_array && !Array.isArray ) log('flag', 'invalid publish: ', excepted_array )
+
 		excepted_array = Array.isArray( excepted_array ) ? excepted_array : []
 
 		let r = {}

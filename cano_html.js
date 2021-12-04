@@ -119,7 +119,7 @@ const render = function( type, request, data ){
 							<h2 class='page-title'>Account</h2>
 							<div id='account'>
 								<div class='stat-row'>
-									<span class='stat'>email: ${ request.session.USER.email }</span>
+									<span class='stat'>email: ${ request.session.USER._email }</span>
 								</div>
 							</div>
 

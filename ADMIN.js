@@ -18,7 +18,7 @@ const delete_user = async( request, is_admin ) => {
 	// 	if( !lib.is_admin( request ) ) return lib.return_fail( 'admins only delete user', 'admins only')
 	// }else{
 	// 	if( !lib.is_logged( request ) ) return lib.return_fail( 'invalid delete_user', 'must be logged in')
-	// 	if( request.session.USER.email !== request.body.email ) return lib.return_fail('invalid email delete account' + request.body.email, 'invalid email')
+	// 	if( request.session.USER._email !== request.body.email ) return lib.return_fail('invalid email delete account' + request.body.email, 'invalid email')
 	// }
 	// if( typeof request.body.email !== 'string' ) return lib.return_fail( 'invalid email ' + request.body.email, 'invalid email')
 

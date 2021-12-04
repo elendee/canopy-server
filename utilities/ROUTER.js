@@ -43,11 +43,28 @@ module.exports = {
 
 				switch( packet.type ){
 
-					case 'player_move':
-						BROKER.publish('PLAYER_MOVE', {
-							canopy: CANOPY,
+					// case 'player_move':
+					// 	BROKER.publish('PLAYER_MOVE', {
+					// 		canopy: CANOPY,
+					// 		socket: socket,
+					// 		packet: packet,
+					// 	})
+					// 	break;
+
+					case 'ping_player':
+						const p = CANOPY.getPlayer({ uuid: packet.data.uuid })
+						if( !p ){
+							log('flag', 'missing ping uuid: ', packet.data )
+							return
+						}
+						BROKER.publish('SOCKET_SEND', {
 							socket: socket,
-							packet: packet,
+							packet: {
+								type: 'pong_player',
+								data: {
+									player: p.publish(),
+								}
+							}
 						})
 						break;
 
