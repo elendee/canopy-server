@@ -239,9 +239,10 @@ class Canopy extends Persistent {
 
 	broadcast( sockets, packet ){
 
-		if( cast_logs.includes( packet.type )) log('broadcast', packet )
-
 		packet.ts = Date.now()
+
+		if( cast_logs.includes( packet.type )) log('broadcast', packet )
+		
 		const bundle = JSON.stringify( packet )
 		for( const uuid in sockets ){
 			sockets[ uuid ].send( bundle )
