@@ -204,9 +204,10 @@ const socket_send = event => {
 
 	const { socket, packet } = event
 
+	packet.ts = Date.now()
+
 	log('socket_send', packet )
 
-	packet.ts = Date.now()
 	socket.send( JSON.stringify( packet ) )
 }
 
