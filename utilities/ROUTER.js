@@ -52,15 +52,17 @@ const bind_user = ( socket, CANOPIES ) => {
 				// 	break;
 				case 'update_blob':
 					USER.blob_update( packet )
-					BROKER.publish('BROADCAST', {
-						sockets: CANOPY.getSockets(),
-						packet: {
-							type: 'update_blob',
-							data: {
-								uuid: USER.uuid,
-								blob: USER.custom_data,
+					.then( res => {
+						BROKER.publish('BROADCAST', {
+							sockets: CANOPY.getSockets(),
+							packet: {
+								type: 'update_blob',
+								data: {
+									uuid: USER.uuid,
+									blob: USER.custom_data,
+								}
 							}
-						}
+						})
 					})
 					break;
 

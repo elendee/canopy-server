@@ -65,7 +65,7 @@ module.exports = class User extends Persistent {
 			}
 		}
 
-		this.custom_data = this.blob_unpack()
+		this.blob = this.blob_unpack()
 
 	}
 
@@ -80,21 +80,21 @@ module.exports = class User extends Persistent {
 			log('flag', 'invalid player data', user._custom_string ? err : '(player has no custom string)')
 			data = { invalid: Date.now() }
 		}
-		log('flag', 'user data post unpack: ', data )
+		// log('flag', 'user data post unpack: ', data )
 		return data
 	}
 
-	blob_update( packet ){
+	async blob_update( packet ){
 		log('flag', 'user update: ', packet )
 		const user = this
 		const { type, data } = packet
 		const { blob } = data
 		if( typeof blob === 'object'){
-			user.custom_data = blob
-			delete user.custom_data.invalid
+			user.blob = blob
+			delete user.blob.invalid
 			user.blob_stringify()
 		}
-		log('flag', 'user data post update: ', user.custom_data )
+		log('flag', 'user data post update: ', user.blob )
 		log('flag', 'user string post update: ', user._custom_string )
 
 		// user.save()
@@ -102,9 +102,15 @@ module.exports = class User extends Persistent {
 		// 	log('flag', 'err save: ', err )
 		// })
 
-		SOCKETS[ user.uuid ].request.session.save( err => {
-			if( err ) log('flag', 'err socket save', err )
-			SOCKETS[ user.uuid ].request.session.USER = new User( user )	
+		await new Promise(( resolve, reject ) => {
+			SOCKETS[ user.uuid ].request.session.save( err => {
+				if( err ){
+					reject( err )
+					return
+				}
+				SOCKETS[ user.uuid ].request.session.USER = new User( user )	
+				resolve()
+			})
 		})
 		// .catch(err => {
 		// 	log('flag', 'err socket save', err )
@@ -114,12 +120,12 @@ module.exports = class User extends Persistent {
 	blob_stringify(){
 		const user = this
 		try{
-			user._custom_string = JSON.stringify( user.custom_data )
+			user._custom_string = JSON.stringify( user.blob )
 		}catch(err){
 			log('flag', 'blob_stringify err: ', err )
 			user._custom_string = JSON.stringify({ invalid: Date.now() })
 		}
-		log('flag', 'user string post stringify: ', user.custom_data )
+		log('flag', 'user string post stringify: ', user.blob )
 
 	}
 

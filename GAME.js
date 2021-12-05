@@ -66,14 +66,12 @@ const init_user = async( socket ) => {
 	// get canopy
 	let canopy
 	if( !user._canopy_key ){
-		
+
 		canopy = await touch_canopy('any')
 		if( !canopy ) return lib.return_fail( 'no canopies', 'no canopy found')
 
 		user._canopy_key = canopy._id
 		if( user._id ) await user.save()
-
-		log('init_user', 'entered:', lib.identify( user ) )
 
 	}else{
 
@@ -82,7 +80,7 @@ const init_user = async( socket ) => {
 
 	}
 
-
+	log('init_user', 'entered:', lib.identify( user ) )
 
 	ROUTER.bind_user( socket, CANOPIES )
 
