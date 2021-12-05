@@ -51,7 +51,7 @@ const bind_user = ( socket, CANOPIES ) => {
 				// 	})
 				// 	break;
 				case 'update_blob':
-					USER.update_blob( packet )
+					USER.blob_update( packet )
 					BROKER.publish('BROADCAST', {
 						sockets: CANOPY.getSockets(),
 						packet: {
