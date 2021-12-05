@@ -61,7 +61,7 @@ const init_user = async( socket ) => {
 	let user
 	socket.request.session.USER = user = new User( u )
 	if( !user ) return lib.return_fail( 'no user rejected', 'no user found' )
-	log('init_user', lib.identify( user ) )
+	log('init_user', 'attempt:', lib.identify( user ) )
 
 	// get canopy
 	let canopy
@@ -72,7 +72,7 @@ const init_user = async( socket ) => {
 		user._canopy_key = canopy._id
 		if( user._id ) await user.save()
 
-		log('init_user', lib.identify( user ) + ' entered canopy' )
+		log('init_user', 'entered:', lib.identify( user ) )
 
 	}
 
@@ -89,7 +89,7 @@ const init_user = async( socket ) => {
 
 	const c = canopy.publish(['_seed'])
 
-	log('init_user', lib.identify( user ) + ' entering canopy: ', c )
+	// log('init_user', lib.identify( user ) + ' entering canopy: ', c )
 
 	BROKER.publish('SOCKET_SEND', {
 		socket: socket,
