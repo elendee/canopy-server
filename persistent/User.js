@@ -76,7 +76,7 @@ module.exports = class User extends Persistent {
 		try{
 			data = JSON.parse( user._custom_string )
 		}catch( err ){
-			log('flag', 'invalid player data', err )
+			log('flag', 'invalid player data', user._custom_string ? err : '(player has no custom string)')
 			data = { invalid: Date.now() }
 		}
 		return data
@@ -84,8 +84,8 @@ module.exports = class User extends Persistent {
 
 
 	blob_update( packet ){
-		// log('flag', 'user update: ', packet )
-		const { data } = packet
+		log('flag', 'user update: ', packet )
+		const { type, data } = packet
 		const { blob } = data
 		this.custom_data = blob
 	}
