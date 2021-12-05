@@ -7,7 +7,8 @@ const {
 	Vector3,
 	Vector2,
 } = require('three')
-const GLOBAL = require('../GLOBAL_PUBLIC.js')
+// const GLOBAL = require('../GLOBAL_PUBLIC.js')
+const SOCKETS = require('../SOCKETS.js')
 const Persistent = require('./Persistent.js')
 
 // const { coilmail } = require('../mail.js')
@@ -79,22 +80,36 @@ module.exports = class User extends Persistent {
 			log('flag', 'invalid player data', user._custom_string ? err : '(player has no custom string)')
 			data = { invalid: Date.now() }
 		}
+		log('flag', 'user data post unpack: ', data )
 		return data
 	}
 
-
 	blob_update( packet ){
 		log('flag', 'user update: ', packet )
+		const user = this
 		const { type, data } = packet
 		const { blob } = data
 		if( typeof blob === 'object'){
-			this.custom_data = blob
-			delete this.custom_data.invalid
-			this.blob_stringify()
+			user.custom_data = blob
+			delete user.custom_data.invalid
+			user.blob_stringify()
 		}
+		log('flag', 'user data post update: ', user.custom_data )
+		log('flag', 'user string post update: ', user._custom_string )
+
+		// user.save()
+		// .catch( err => {
+		// 	log('flag', 'err save: ', err )
+		// })
+
+		SOCKETS[ user.uuid ].request.session.save( err => {
+			if( err ) log('flag', 'err socket save', err )
+			SOCKETS[ user.uuid ].request.session.USER = new User( user )	
+		})
+		// .catch(err => {
+		// 	log('flag', 'err socket save', err )
+		// })
 	}
-
-
 
 	blob_stringify(){
 		const user = this
@@ -104,6 +119,8 @@ module.exports = class User extends Persistent {
 			log('flag', 'blob_stringify err: ', err )
 			user._custom_string = JSON.stringify({ invalid: Date.now() })
 		}
+		log('flag', 'user string post stringify: ', user.custom_data )
+
 	}
 
 

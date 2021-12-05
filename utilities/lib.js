@@ -615,6 +615,7 @@ const identify = obj => {
 	if( obj.subtype ) return id + 'subtype: ' + obj.subtype
 	if( obj.type ) return id + 'type: ' + obj.type
 	if( obj.email ) return id + 'email: ' + obj.email
+	if( obj.uuid ) return 'uuid pre:' + obj.uuid.substr(0, 4)
 	return '(unknown identify)'
 }
 

@@ -66,6 +66,7 @@ const init_user = async( socket ) => {
 	// get canopy
 	let canopy
 	if( !user._canopy_key ){
+		
 		canopy = await touch_canopy('any')
 		if( !canopy ) return lib.return_fail( 'no canopies', 'no canopy found')
 
@@ -74,15 +75,23 @@ const init_user = async( socket ) => {
 
 		log('init_user', 'entered:', lib.identify( user ) )
 
+	}else{
+
+		canopy = await touch_canopy( user._canopy_key )
+		if( !canopy ) return lib.return_fail( 'no canopies', 'no canopy found')
+
 	}
+
+
 
 	ROUTER.bind_user( socket, CANOPIES )
 
 	SOCKETS[ user.uuid ] = socket
 
-	// log('flag', 'new player: ', user.uuid )
+	// log('flag', 'new player: ', user.custom_data )
 
 	canopy.join_user( user )
+
 
 	// log('flag', '??', Object.keys( CANOPIES ))
 	// log('flag', '??', Object.keys( canopy._PLAYERS ))
