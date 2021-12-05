@@ -76,7 +76,7 @@ module.exports = class User extends Persistent {
 		try{
 			data = JSON.parse( user._custom_string )
 		}catch( err ){
-			log('flag', 'invalid player data')
+			log('flag', 'invalid player data', err )
 			data = { invalid: Date.now() }
 		}
 		return data
