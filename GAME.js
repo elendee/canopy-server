@@ -207,26 +207,10 @@ const purge = event => {
 
 
 
-const socket_send = event => {
-
-	const { socket, packet } = event
-
-	if( Object.keys( event ).length !== 2 ){
-		log('flag', 'invalid socket send', packet )
-		return 
-	}
-
-	packet.ts = Date.now()
-
-	log('socket_send', packet )
-
-	socket.send( JSON.stringify( packet ) )
-}
 
 
 
 BROKER.subscribe('GAME_PURGE', purge )
-BROKER.subscribe('SOCKET_SEND', socket_send )
 
 
 

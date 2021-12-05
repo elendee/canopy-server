@@ -51,12 +51,16 @@ const handle_chat = event => {
 		if( !players ) return lib.return_fail('no players for chat: ' + data.msg, 'chat not sent')
 
 
-		canopy.broadcast( sockets, {
-			type: 'chat',
-			chat_type: data.chat_type,
-			msg: data.msg,
-			sender_uuid: sender.uuid,
+		BROKER.publish('BROADCAST', {
+			sockets: sockets,
+			packet: {
+				type: 'chat',
+				chat_type: data.chat_type,
+				msg: data.msg,
+				sender_uuid: sender.uuid,
+			}
 		})
+
 
 	}catch( er ){
 		log('flag', er )

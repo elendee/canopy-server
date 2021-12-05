@@ -21,11 +21,14 @@ class Npc extends Being {
 		npc.y += ( Math.random() > .5 ) ? 1 : -1
 		// end shim
 
-		canopy.broadcast( canopy.getSockets(), {
-			type: 'step',
-			uuid: npc.uuid,
-			x: npc.x,
-			y: npc.y,
+		BROKER.publish('BROADCAST', {
+			sockets: canopy.getSockets(),
+			packet: {
+				type: 'step',
+				uuid: npc.uuid,
+				x: npc.x,
+				y: npc.y,
+			}
 		})
 		
 		setTimeout(() => {

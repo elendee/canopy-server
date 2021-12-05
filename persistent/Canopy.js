@@ -1,13 +1,17 @@
 const env = require('../.env.js')
+const SOCKETS = require('../SOCKETS.js')
+
 const lib = require('../utilities/lib.js')
 const log = require('../utilities/log.js')
+const BROKER = require('../utilities/EventBroker.js')
+
 const DB = require('./db.js')
 const Persistent = require('./Persistent.js')
 const Tile = require('./Tile.js')
 const Being = require('./Being.js')
 const Npc = require('./Npc.js')
+
 const uuid = require('uuid').v4
-const SOCKETS = require('../SOCKETS.js')
 
 
 
@@ -153,9 +157,13 @@ class Canopy extends Persistent {
 
 
 	grow(){
-		this.broadcast( this.getSockets(), {
-			type: 'grow',
-			growth: 'some new tile data...'
+		const canopy = this
+		BROKER.publish('BROADCAST', {
+			sockets: canopy.getSockets(),
+			packet: {
+				type: 'grow',
+				growth: 'some new tile data...'
+			}			
 		})
 	}
 
@@ -258,18 +266,6 @@ class Canopy extends Persistent {
 		return undefined
 	}
 
-
-	broadcast( sockets, packet ){
-
-		packet.ts = Date.now()
-
-		if( ['chat'].includes( packet.type ) ) log('broadcast', packet )
-
-		const bundle = JSON.stringify( packet )
-		for( const uuid in sockets ){
-			sockets[ uuid ].send( bundle )
-		}
-	}
 
 
 	close( CANOPIES ){
