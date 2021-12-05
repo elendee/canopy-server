@@ -87,7 +87,10 @@ module.exports = class User extends Persistent {
 		log('flag', 'user update: ', packet )
 		const { type, data } = packet
 		const { blob } = data
-		this.custom_data = blob
+		if( typeof blob === 'object'){
+			this.custom_data = blob
+			delete this.custom_data.invalid
+		}
 	}
 
 
