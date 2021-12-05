@@ -105,6 +105,7 @@ const bind_user = ( socket, CANOPIES ) => {
 
 				}
 			}
+			log('flag', 'err packet: ', e )
 			// lib.bad_packet( socket )
 			return false
 
@@ -137,8 +138,8 @@ const bind_user = ( socket, CANOPIES ) => {
 
 
 
-// const ALL_EVENTS = []
 
+// SOCKET_SEND
 
 const log_casts = ['chat']
 
@@ -149,8 +150,6 @@ const broadcast = event => {
 	if( !packet || !sockets || !packet.type ) return lib.return_fail({
 		msg: 'invalid broadcast', 
 		packet: packet }, 'invalid broadcast' )
-
-	// if( !ALL_EVENTS.includes( packet.type ) ) ALL_EVENTS.push( packet.type )
 
 	packet.ts = Date.now()
 
@@ -163,9 +162,7 @@ const broadcast = event => {
 }
 
 
-
-
-
+// BROADCAST
 
 const log_sends = ['chat']
 
@@ -178,14 +175,16 @@ const socket_send = event => {
 		return 
 	}
 
-	// if( !ALL_EVENTS.includes( packet.type ) ) ALL_EVENTS.push( packet.type )
-
 	packet.ts = Date.now()
 
 	if( log_sends.includes( packet.type ) ) log('socket_send', packet )
 
 	socket.send( JSON.stringify( packet ) )
 }
+
+
+
+
 
 
 
