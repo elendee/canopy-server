@@ -90,6 +90,7 @@ module.exports = class User extends Persistent {
 		if( typeof blob === 'object'){
 			this.custom_data = blob
 			delete this.custom_data.invalid
+			this.blob_stringify()
 		}
 	}
 
